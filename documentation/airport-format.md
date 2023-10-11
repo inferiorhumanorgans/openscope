@@ -105,6 +105,9 @@ _Note: The code block shown below is an abbreviated version of [ksea.json](https
                 [47.431201, -122.308035, "346.8ft"]
             ],
             "ils": [true, true],
+            "final_fix": ["DGLAS", "BUCKK"],
+            "glideslope": [3.00, 2.75],
+            "threshold_height": [56, 60]
         },
         {
             "name": ["16R", "34L"],
@@ -113,6 +116,9 @@ _Note: The code block shown below is an abbreviated version of [ksea.json](https
                 [47.440562, -122.318092, "356.3ft"]
             ],
             "ils": [true, true],
+            "final_fix": ["FINKA", "JALON"],
+            "glideslope": [3.00, 3.00],
+            "threshold_height": [55, 55]
         }
     ],
     "sids": {
@@ -323,7 +329,7 @@ All fixes listed within the Standard Routes need to be defined within this secti
     "EUG"  : ["N44d07.25m0", "W123d13.37m0", "Eugene"],
     "FEPOT": ["N47d04.85m0", "W123d13.13m0"],
     "GEG"  : ["N47d33.90m0", "W117d37.61m0"],
-    "KRUZR": ["N48d04.65m0", "W120d34.68m0", "cruiser"],
+    "KRUZR": ["N48d04.65m0", "W120d34.68m0", "Cruiser"],
     "ONSET": ["N48d57.48m0", "W118d00.00m0"],
     "PAE"  : ["N47d55.19m0", "W122d16.67m0", "Paine"],
     "WESET": ["N47d24.35m0", "W122d19.10m0"],
@@ -342,7 +348,7 @@ Each fix can have an optional third parameter which defines how the name is pron
 
 ```json
 "EUG"  : ["N44d07.25m0", "W123d13.37m0", "Eugene"],
-"KRUZR": ["N48d04.65m0", "W120d34.68m0", "cruiser"],
+"KRUZR": ["N48d04.65m0", "W120d34.68m0", "Cruiser"],
 "PAE"  : ["N47d55.19m0", "W122d16.67m0", "Paine"],
 ```
 
@@ -445,10 +451,12 @@ Areas of restricted airspace may be added to the `restricted` property of the ai
             [47.463767, -122.307749, "432.5ft"],
             [47.431201, -122.308035, "346.8ft"]
         ],
-        "ils": [false, true],
+        "ils": [true, true],
         "ils_distance":[30, 25],
         "loc_maxDist": [28, 20],
-        "glideslope": [3.00, 2.50]
+        "final_fix": ["DGLAS", "BUCKK"],
+        "glideslope": [3.00, 2.75],
+        "threshold_height": [56, 60]
     }
 ],
 ```
@@ -457,10 +465,12 @@ Areas of restricted airspace may be added to the `restricted` property of the ai
 * **end** - Latitude, Longitude, and Elevation of the runway threshold (the spot where the numbers would be painted). _see [lat, lon, elev](#latitude-longitude-elevation) for formatting_
 * **ils** - Boolean property used to indicate if a runway has an ILS approach
 * **ils_distance** - Distance the ILS extends away from the runway
-* **glideslope** - Descent angle of the ILS glideslope
 * **loc_maxDist** - Maximum distance from the runway threshold where the localizer is still usable by aircraft, in nm
 * **ils_gs_maxHeight** - Maximum height where the glideslope is still usable by aircraft, in ft MSL
 * **sepFromAdjacent** - A way to manually specify the separation required between this runway and an adjacent runway, in nm
+* **final_fix** - Name of the final approach fix
+* **glideslope** - Descent angle of the ILS glideslope
+* **threshold_height** - Height at the threshold (TCH) in feet.
 
 Runways are defined in pairs because a runway can be used from either direction.  This makes defining runways a little tricky, so special attention should be paid to how the data is set up.  For each property, the first value will be considered part of the first runway and the second property for the second runway.  If you were to take the above example and extract each runway's properties, you would end up with the following two objects:
 
@@ -471,7 +481,10 @@ Runways are defined in pairs because a runway can be used from either direction.
     "end": [
         [47.463767, -122.307749, "432.5ft"]
     ],
-    "ils": false
+    "ils": true,
+    "final_fix": "DGLAS",
+    "glideslope": 3.00,
+    "threshold_height": 56
 }
 
 // Runway 34R
@@ -480,7 +493,10 @@ Runways are defined in pairs because a runway can be used from either direction.
     "end": [
         [47.431201, -122.308035, "346.8ft"]
     ],
-    "ils": true
+    "ils": true,
+    "final_fix": "BUCKK",
+    "glideslope": 2.75,
+    "threshold_height": 60
 }
 ```
 

@@ -308,7 +308,9 @@
                 [47.431201, -122.308035, "346.8ft"]
             ],
             "ils": [true, true],
-            "glideslope": [3.00, 2.75]
+            "final_fix": ["DGLAS", "BUCKK"],
+            "glideslope": [3.00, 2.75],
+            "threshold_height": [56, 60]
         },
         {
             "name": ["16C", "34C"],
@@ -317,7 +319,9 @@
                 [47.437999, -122.311211, "363.0ft"]
             ],
             "ils": [true, true],
-            "glideslope": [3.00, 3.00]
+            "final_fix": ["SODOE", "TIFYS"],
+            "glideslope": [3.00, 3.00],
+            "threshold_height": [55, 56]
         },
         {
             "name": ["16R", "34L"],
@@ -326,7 +330,9 @@
                 [47.440562, -122.318092, "356.3ft"]
             ],
             "ils": [true, true],
-            "glideslope": [3.00, 3.00]
+            "final_fix": ["FINKA", "JALON"],
+            "glideslope": [3.00, 3.00],
+            "threshold_height": [55, 55]
         }
     ],
     "airways": {

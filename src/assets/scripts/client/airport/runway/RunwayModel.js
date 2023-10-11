@@ -1,4 +1,4 @@
-import _ceil from 'lodash/ceil';
+import _round from 'lodash/round';
 import _without from 'lodash/without';
 import BaseModel from '../../base/BaseModel';
 import StaticPositionModel from '../../base/StaticPositionModel';
@@ -24,6 +24,7 @@ import {
     nm,
     degreesToRadians
 } from '../../utilities/unitConverters';
+import FixCollection from '../../navigationLibrary/FixCollection';
 
 /**
  * Describes a single runway at an airport
@@ -246,6 +247,14 @@ export default class RunwayModel extends BaseModel {
             this.ils.glideslopeGradient = degreesToRadians(data.glideslope[end]);
         }
 
+        if (data.final_fix) {
+            this.ils.finalFix = data.final_fix[end];
+        }
+
+        if (data.threshold_height) {
+            this.ils.thresholdHeight = data.threshold_height[end];
+        }
+
         // TODO: neither property is defined in any airport json files
         // if (data.ils_gs_maxHeight) {
         //     this.ils.gs_maxHeight = data.ils_gs_maxHeight[end];
@@ -275,7 +284,7 @@ export default class RunwayModel extends BaseModel {
         const rise = tan(abs(glideslopeGradient));
 
         // TODO: this logic could be abstracted to a helper.
-        return this.elevation + (rise * km_ft(distance));
+        return this.elevation + (this.ils.thresholdHeight || 0) + (rise * km_ft(distance));
     }
 
     /**
@@ -286,7 +295,18 @@ export default class RunwayModel extends BaseModel {
      * @return {number} glideslope altitude in ft MSL
      */
     getGlideslopeAltitudeAtFinalApproachFix() {
-        return this.getGlideslopeAltitude(km(AIRPORT_CONSTANTS.FINAL_APPROACH_FIX_DISTANCE_NM));
+        let finalFixDistance;
+
+        if (this.ils.finalFix) {
+            const finalFixModel = FixCollection.findFixByName(this.ils.finalFix);
+            finalFixDistance = this._positionModel.distanceToPosition(finalFixModel.positionModel);
+        }
+
+        if (!finalFixDistance) {
+            console.warn(`Couldn't find final fix, using default`);
+        }
+
+        return this.getGlideslopeAltitude(km(finalFixDistance || AIRPORT_CONSTANTS.FINAL_APPROACH_FIX_DISTANCE_NM));
     }
 
     /**
@@ -298,7 +318,7 @@ export default class RunwayModel extends BaseModel {
      */
     getMinimumGlideslopeInterceptAltitude() {
         const altitudeAtFinalApproachFix = this.getGlideslopeAltitudeAtFinalApproachFix();
-        const minimumInterceptAltitude = _ceil(altitudeAtFinalApproachFix, -2);
+        const minimumInterceptAltitude = _round(altitudeAtFinalApproachFix, -2);
 
         return minimumInterceptAltitude;
     }
